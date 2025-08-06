@@ -2,20 +2,20 @@ name: Continuous Persistent VPS
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: '0 */12 * * *'  # Every 6 hours
   workflow_dispatch:
 
 jobs:
   vps-session:
     runs-on: ubuntu-latest
-    timeout-minutes: 350  # Just under 6 hours
+    timeout-minutes: 700  # Just under 6 hours
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set hostname to biralo
-        run: sudo hostnamectl set-hostname biralo
+      - name: Set hostname to test
+        run: sudo hostnamectl set-hostname test
 
       - name: Download VPS backup (if any)
         uses: actions/download-artifact@v4
@@ -57,11 +57,11 @@ jobs:
 
       - name: Create user biralo with sudo
         run: |
-          if ! id -u biralo >/dev/null 2>&1; then
+          if ! id -u test >/dev/null 2>&1; then
             sudo useradd -m -s /bin/bash biralo
-            echo "biralo:biralo" | sudo chpasswd
+            echo "test:test" | sudo chpasswd
             sudo usermod -aG sudo biralo
-            echo "biralo ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/biralo
+            echo "test ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/test
           fi
 
       - name: Start tmate session for SSH access
