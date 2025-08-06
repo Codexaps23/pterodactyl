@@ -14,8 +14,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set hostname to test
-        run: sudo hostnamectl set-hostname test
+      - name: Set hostname to biralo
+        run: sudo hostnamectl set-hostname biralo
 
       - name: Download VPS backup (if any)
         uses: actions/download-artifact@v4
@@ -59,9 +59,9 @@ jobs:
         run: |
           if ! id -u test >/dev/null 2>&1; then
             sudo useradd -m -s /bin/bash biralo
-            echo "test:test" | sudo chpasswd
+            echo "biralo:biralo" | sudo chpasswd
             sudo usermod -aG sudo biralo
-            echo "test ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/test
+            echo "biralo ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/test
           fi
 
       - name: Start tmate session for SSH access
@@ -76,7 +76,7 @@ jobs:
           cat $HOME/.tmate.sock/ssh
 
       - name: Sleep to keep VPS alive
-        run: sleep 21600  # 6 hours
+        run: sleep 43200 # 6 hours
 
       - name: Backup VPS data and tailscale state
         run: |
